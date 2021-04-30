@@ -327,4 +327,56 @@ public class SingleLinkedList<T extends Node> {
             return ptr1;
         return null;
     }
+    private void printReverseUsingRecursion(Node ptr){
+        if(ptr == null)
+            return;
+        printReverseUsingRecursion(ptr.getNext());
+        System.out.print(ptr.getData() + " ");
+    }
+    public void printReverse(){
+        printReverseUsingRecursion(this.headerNode);
+    }
+    public void swapPairwiseElements(){
+        Node ptr = this.headerNode;
+        while(ptr != null && ptr.getNext() != null){
+            int data = ptr.getData();
+            ptr.setData(ptr.getNext().getData());
+            ptr.getNext().setData(data);
+            ptr = ptr.getNext().getNext();
+        }
+    }
+    public void moveLastToFront(){
+        Node ptr = this.headerNode;
+        Node prev = null;
+        while(ptr.getNext() != null){
+            prev = ptr;
+            ptr = ptr.getNext();
+        }
+        if(prev != null){
+            prev.setNext(null);
+            ptr.setNext(this.headerNode);
+            this.headerNode = ptr;
+        }
+    }
+    public SingleLinkedList<Node> intersectionOfLists(SingleLinkedList<Node> tempList){
+        Node ptr1 = this.headerNode;
+        Node ptr2 = tempList.headerNode;;
+        SingleLinkedList<Node> listIntersection = new SingleLinkedList<>();
+        while(ptr1 != null && ptr2 != null){
+            if(ptr1.getData() < ptr2.getData()){
+                while(ptr1 != null && ptr1.getData() < ptr2.getData())
+                    ptr1 = ptr1.getNext();
+                if(ptr1 != null && ptr1.getData() == ptr2.getData())
+                    listIntersection.add(ptr1.getData());
+                ptr2 = ptr2.getNext();
+            }else{
+                while(ptr2 != null && ptr2.getData() < ptr1.getData())
+                    ptr2 = ptr2.getNext();
+                if(ptr2 != null && ptr2.getData() == ptr1.getData())
+                    listIntersection.add(ptr2.getData());
+                ptr1 = ptr1.getNext();
+            }
+        }
+        return listIntersection;
+    }
 }
