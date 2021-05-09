@@ -1,6 +1,7 @@
 package single.linked.list;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class SingleLinkedList<T extends Node> {
@@ -110,6 +111,16 @@ public class SingleLinkedList<T extends Node> {
             previousNode = currentNode;
             currentNode = currentNode.getNext();
         }
+    }
+    public void print(Node header){
+        Node ptr = header;
+        while(ptr != null){
+            System.out.print(ptr.getData() +" -> ");
+            ptr = ptr.getNext();
+            if(ptr == null)
+                System.out.print("-||");
+        }
+        System.out.println();
     }
     public void print(){
         Node tempNode= this.headerNode;
@@ -378,5 +389,88 @@ public class SingleLinkedList<T extends Node> {
             }
         }
         return listIntersection;
+    }
+
+    public void deleteAlternateNodes(){
+        Node ptr = this.headerNode;
+        while(ptr != null && ptr.getNext() != null){
+            Node targetNode = ptr.getNext().getNext();
+            ptr.setNext(targetNode);
+            ptr = ptr.getNext();
+        }
+    }
+
+    public Node sortedMerge(SingleLinkedList<Node> targetList){
+        Node ptr1 = this.headerNode;
+        Node ptr2 = targetList.headerNode;
+        Node resultNode;
+        if(ptr1 == null)
+            return ptr2;
+        if(ptr2 == null)
+            return ptr1;
+        resultNode = (ptr1.getData() <= ptr2.getData()) ? ptr1 : ptr2;
+        while(ptr1 != null && ptr2 != null){
+            if(ptr1.getData() <= ptr2.getData()){
+                while(ptr1.getNext() != null && ptr1.getNext().getData() <= ptr2.getData())
+                    ptr1 = ptr1.getNext();
+                Node temp = ptr1.getNext();
+                ptr1.setNext(ptr2);
+                ptr1 = temp;
+            }else{
+                while(ptr2.getNext() != null && ptr2.getNext().getData() <= ptr1.getData())
+                    ptr2 = ptr2.getNext();
+                Node temp = ptr2.getNext();
+                ptr2.setNext(ptr1);
+                ptr2 = temp;
+            }
+        }
+        return resultNode;
+    }
+
+    public void alternateEvensAndOddsReArrangement(){
+        Node ptr = this.headerNode , ptr1 = null, ptr2 = null;
+        int index = 1;
+        while(ptr != null){
+            if(index % 2 != 0 && ptr.getData() % 2 == 0){
+                ptr1 = ptr;
+            } else if(index % 2 == 0 && ptr.getData() % 2 != 0){
+                ptr2 = ptr;
+            }
+            if(ptr1 != null && ptr2 != null){
+                int temp = ptr1.getData();
+                ptr1.setData(ptr2.getData());
+                ptr2.setData(temp);
+                ptr1 = null;
+                ptr2 = null;
+            }
+            index++;
+            ptr = ptr.getNext();
+        }
+    }
+
+    public Node [] alternateSplit(){
+        Node ptr1 = this.headerNode;
+        if(ptr1 == null)
+            return null;
+        Node ptr2 = ptr1.getNext();
+        Node a = this.headerNode , b = this.headerNode.getNext();
+        while(ptr1 != null && ptr2 != null){
+            Node temp = ptr2.getNext();
+            ptr1.setNext(temp);
+            if(temp != null)
+                ptr2.setNext(temp.getNext());
+            ptr1 = ptr1.getNext();
+            ptr2 = ptr2.getNext();
+        }
+        return new Node[]{a , b};
+    }
+    public boolean areListsIdentical(SingleLinkedList<Node> targetList){
+        Node ptr = this.headerNode;
+        Node ptr1 = targetList.headerNode;;
+        while(ptr != null && ptr1 != null && ptr.getData() == ptr1.getData()){
+            ptr = ptr.getNext();
+            ptr1 = ptr1.getNext();
+        }
+        return (ptr == null && ptr1 == null);
     }
 }
