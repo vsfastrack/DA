@@ -473,4 +473,145 @@ public class SingleLinkedList<T extends Node> {
         }
         return (ptr == null && ptr1 == null);
     }
+
+    public void seggreagateEvenAndOddNodes(){
+        Node ptr = this.headerNode  , evenEnd = null;
+        Node prev = this.headerNode;
+        while(ptr != null){
+            if(ptr.getData() % 2 == 0){
+                //Connect previous to next node in link
+                Node ptrNext = ptr.getNext();
+                prev.setNext(ptrNext);
+
+                //Fitting the even node at start of add nodes
+                if(evenEnd == null){
+                    Node temp = this.headerNode;
+                    this.headerNode = ptr;
+                    ptr.setNext(temp);
+                }else{
+                    Node temp = evenEnd.getNext();
+                    evenEnd.setNext(ptr);
+                    ptr.setNext(temp);
+                }
+                evenEnd = ptr;
+                ptr = ptrNext;
+            }else{
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+        }
+    }
+    public SingleLinkedList<Node> addTwoNumbers(SingleLinkedList<Node> secondNumber){
+        Node ptr1= this.headerNode;
+        Node ptr2 = secondNumber.headerNode;
+        SingleLinkedList<Node> resultList = new SingleLinkedList<>();
+        int sum  = 0 , carry = 0 , addition;
+        while(ptr1 != null || ptr2 != null){
+            int firstData = (ptr1 != null) ? ptr1.getData() : 0 ;
+            int secondData = (ptr2 != null) ? ptr2.getData() : 0 ;
+            addition = firstData +secondData + carry;
+            sum = addition % 10;
+            carry = addition / 10;
+            resultList.add(sum);
+            ptr1 = (ptr1 != null) ? ptr1.getNext() : ptr1;
+            ptr2 = (ptr2 != null) ? ptr2.getNext() : ptr2;
+        }
+        if(carry == 1)
+            resultList.add(1);
+        return resultList;
+    }
+    public SingleLinkedList<Node> [] unionAndIntersection(SingleLinkedList<Node> secondList){
+        Node ptr1 =  this.headerNode;
+        Node ptr2 = secondList.headerNode;
+        Map<Integer , Integer> frequencyMap = new HashMap<>();
+        SingleLinkedList<Node> [] resultant = new SingleLinkedList[2];
+        SingleLinkedList<Node> unionList = new SingleLinkedList<>();
+        SingleLinkedList<Node> intersectionList = new SingleLinkedList<>();
+        while(ptr1 != null){
+            int element = ptr1.getData();
+            frequencyMap.put(element , 1);
+            unionList.add(element);
+            ptr1 = ptr1.getNext();
+        }
+        while(ptr2 != null){
+            int element = ptr2.getData();
+            if(frequencyMap.get(element) != null){
+                intersectionList.add(element);
+            }else{
+                frequencyMap.put(element , 1);
+                unionList.add(element);
+            }
+            ptr2 = ptr2.getNext();
+        }
+        resultant[0] = unionList;
+        resultant[1] = intersectionList;
+        return resultant;
+    }
+    public void rotate(int k){
+        Node ptr = this.headerNode;
+        while(ptr != null && k-- > 1)
+            ptr = ptr.getNext();
+        if(ptr != null){
+            Node nextPtr = ptr.getNext();
+            ptr.setNext(null);
+            Node currentHeader = this.headerNode;
+            this.headerNode = nextPtr;
+            Node temp = nextPtr;
+            while(temp.getNext() != null)
+                temp = temp.getNext();
+            temp.setNext(currentHeader);
+        }
+    }
+    public SingleLinkedList<Node> addNumbers(SingleLinkedList<Node> secondList){
+        this.reverse();
+        secondList.reverse();
+        Node ptr1 = this.headerNode;
+        Node ptr2 = secondList.headerNode;
+        SingleLinkedList<Node> result = new SingleLinkedList<>();
+        int sum = 0 , carry = 0 , addition = 0;
+        while(ptr1 != null || ptr2 != null){
+            int firstNumber = (ptr1 != null) ? ptr1.getData() : 0;
+            int secondNumber = (ptr2 != null) ? ptr2.getData() : 0;
+
+            addition = firstNumber + secondNumber + carry;
+            sum = addition % 10;
+            carry = addition / 10;
+            result.add(sum);
+
+            ptr1 = (ptr1 != null) ? ptr1.getNext() : ptr1;
+            ptr2 = (ptr2 != null) ? ptr2.getNext() : ptr2;
+        }
+        if(carry == 1)
+            result.add(1);
+        result.reverse();
+        return result;
+    }
+    public void sort(){
+        Node ptr = this.headerNode;
+        int zeroCount = 0 , oneCount  = 0 , twoCount  = 0;
+        while(ptr != null){
+            int element = ptr.getData();
+            if(element == 0)
+                zeroCount++;
+            if(element ==1)
+                oneCount++;
+            if(element ==2)
+                twoCount++;
+            ptr = ptr.getNext();
+        }
+        ptr = this.headerNode;
+        while(zeroCount-- > 0){
+            ptr.setData(0);
+            ptr = ptr.getNext();
+        }
+        while(oneCount-- > 0){
+            ptr.setData(1);
+            ptr = ptr.getNext();
+        }
+        while(twoCount-- > 0){
+            ptr.setData(2);
+            ptr = ptr.getNext();
+        }
+    }
+
 }
