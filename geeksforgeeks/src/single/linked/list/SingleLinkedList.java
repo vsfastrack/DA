@@ -14,6 +14,9 @@ public class SingleLinkedList<T extends Node> {
         this.headerNode = headNode;
     }
 
+    public Node getHeaderNode(){
+        return this.headerNode;
+    }
     public void add(int data){
         if(this.headerNode == null){
             this.headerNode = new Node(data);
@@ -113,6 +116,11 @@ public class SingleLinkedList<T extends Node> {
             currentNode = currentNode.getNext();
         }
     }
+
+    /**
+     * Time complexity of printing Linked List
+     * @param header
+     */
     public void print(Node header){
         Node ptr = header;
         while(ptr != null){
@@ -373,7 +381,7 @@ public class SingleLinkedList<T extends Node> {
     public SingleLinkedList<Node> intersectionOfLists(SingleLinkedList<Node> tempList){
         Node ptr1 = this.headerNode;
         Node ptr2 = tempList.headerNode;;
-        SingleLinkedList<Node> listIntersection = new SingleLinkedList();
+        SingleLinkedList<Node> listIntersection = new SingleLinkedList<>();
         while(ptr1 != null && ptr2 != null){
             if(ptr1.getData() < ptr2.getData()){
                 while(ptr1 != null && ptr1.getData() < ptr2.getData())
@@ -763,5 +771,52 @@ public class SingleLinkedList<T extends Node> {
         if(hasNumberOccured && prevLink == null){
             this.headerNode = nextLink;
         }
+    }
+
+    public Node getMiddleOfList(Node headerNode){
+        if(headerNode == null)
+            return null;
+        Node slowPtr = headerNode;
+        Node fastPtr = headerNode.getNext();
+        while(slowPtr != null && fastPtr != null && fastPtr.getNext() != null){
+            slowPtr = slowPtr.getNext();
+            fastPtr = fastPtr.getNext().getNext();
+        }
+        return slowPtr;
+    }
+
+    public Node mergeSort(Node headerNode){
+        if(headerNode == null || headerNode.getNext() == null)
+            return  headerNode;
+        Node middleNode = getMiddleOfList(headerNode);
+        Node rightListHeader = middleNode.getNext();
+        middleNode.setNext(null);
+
+        Node left = mergeSort(headerNode);
+        Node right = mergeSort(rightListHeader);
+        return sortedMerge(left , right);
+    }
+
+    public Node sortedMerge(Node ptr1 , Node ptr2){
+        Node result = null;
+        if(ptr1 == null)
+            return ptr2;
+        if(ptr2 == null)
+            return ptr1;
+        if(ptr1.getData() <= ptr2.getData()){
+            result = ptr1;
+            result.next = sortedMerge(ptr1.getNext() , ptr2);
+        }else{
+            result = ptr2;
+            result.next = sortedMerge(ptr1 , ptr2.getNext());
+        }
+        return result;
+    }
+
+    public void mergeSort(){
+        Node ptr = this.headerNode;
+        if(ptr == null)
+            return;
+        mergeSort(ptr);
     }
 }
