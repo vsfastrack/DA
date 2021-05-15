@@ -49,7 +49,7 @@ public class CircularLinkedList <T extends Node>{
         if(slowPtr == null)
             return new Node[2];
         Node fastPtr = slowPtr.getNext();
-        while(slowPtr != this.headerNode && fastPtr != this.headerNode && fastPtr.getNext() != this.headerNode){
+        while(fastPtr != this.headerNode && fastPtr.getNext() != this.headerNode){
             slowPtr = slowPtr.getNext();
             fastPtr = fastPtr.getNext().getNext();
         }
