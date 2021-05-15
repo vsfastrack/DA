@@ -3,6 +3,7 @@ package single.linked.list;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Stack;
 
 public class SingleLinkedList<T extends Node> {
     private Node headerNode;
@@ -372,7 +373,7 @@ public class SingleLinkedList<T extends Node> {
     public SingleLinkedList<Node> intersectionOfLists(SingleLinkedList<Node> tempList){
         Node ptr1 = this.headerNode;
         Node ptr2 = tempList.headerNode;;
-        SingleLinkedList<Node> listIntersection = new SingleLinkedList<>();
+        SingleLinkedList<Node> listIntersection = new SingleLinkedList();
         while(ptr1 != null && ptr2 != null){
             if(ptr1.getData() < ptr2.getData()){
                 while(ptr1 != null && ptr1.getData() < ptr2.getData())
@@ -504,7 +505,7 @@ public class SingleLinkedList<T extends Node> {
     public SingleLinkedList<Node> addTwoNumbers(SingleLinkedList<Node> secondNumber){
         Node ptr1= this.headerNode;
         Node ptr2 = secondNumber.headerNode;
-        SingleLinkedList<Node> resultList = new SingleLinkedList<>();
+        SingleLinkedList<Node> resultList = new SingleLinkedList<Node>();
         int sum  = 0 , carry = 0 , addition;
         while(ptr1 != null || ptr2 != null){
             int firstData = (ptr1 != null) ? ptr1.getData() : 0 ;
@@ -525,8 +526,8 @@ public class SingleLinkedList<T extends Node> {
         Node ptr2 = secondList.headerNode;
         Map<Integer , Integer> frequencyMap = new HashMap<>();
         SingleLinkedList<Node> [] resultant = new SingleLinkedList[2];
-        SingleLinkedList<Node> unionList = new SingleLinkedList<>();
-        SingleLinkedList<Node> intersectionList = new SingleLinkedList<>();
+        SingleLinkedList<Node> unionList = new SingleLinkedList<Node>();
+        SingleLinkedList<Node> intersectionList = new SingleLinkedList<Node>();
         while(ptr1 != null){
             int element = ptr1.getData();
             frequencyMap.put(element , 1);
@@ -567,7 +568,7 @@ public class SingleLinkedList<T extends Node> {
         secondList.reverse();
         Node ptr1 = this.headerNode;
         Node ptr2 = secondList.headerNode;
-        SingleLinkedList<Node> result = new SingleLinkedList<>();
+        SingleLinkedList<Node> result = new SingleLinkedList<Node>();
         int sum = 0 , carry = 0 , addition = 0;
         while(ptr1 != null || ptr2 != null){
             int firstNumber = (ptr1 != null) ? ptr1.getData() : 0;
@@ -614,4 +615,153 @@ public class SingleLinkedList<T extends Node> {
         }
     }
 
+    /**
+     * Time complexity of algorithm is O(m+n) for merging lists such that lists are linked alternately
+     * @param secondList
+     */
+    public void mergeLists(SingleLinkedList<Node> secondList){
+        Node ptr1 = this.headerNode;
+        Node ptr2 = secondList.headerNode;
+        if(ptr1 == null || ptr2 == null)
+            return;
+        while(ptr1 != null && ptr2 != null){
+            Node ptr1Next = ptr1.getNext();
+            Node ptr2Next = ptr2.getNext();
+            ptr1.setNext(ptr2);
+            ptr2.setNext(ptr1Next);
+            ptr1 = ptr1Next;
+            ptr2 = ptr2Next;
+        }
+    }
+    public void swapPairwise(){
+        Node ptr = this.headerNode;
+        while(ptr != null && ptr.getNext() != null){
+            int temp = ptr.getData();
+            ptr.setData(ptr.getNext().getData());
+            ptr.getNext().setData(temp);
+            ptr = ptr.getNext().getNext();
+        }
+    }
+    public Node reverse(Node headerNode){
+        if(headerNode == null)
+            return headerNode;
+        Node ptr = headerNode;
+        Node prev = null;
+        while(ptr != null){
+            Node nextPtr = ptr.getNext();
+            ptr.setNext(prev);
+            prev = ptr;
+            ptr = nextPtr;
+        }
+        return prev;
+    }
+
+    /**
+     * Rearranges Front with End in time complexity of O(n)
+     */
+    public void reAranageLastAndFront(){
+        Node ptr = this.headerNode;
+        if(ptr == null)
+            return;
+        int length = this.getLength();
+        int  k = length / 2;
+        Node prev = null ;
+        while(k-- > 0){
+            prev = ptr;
+            ptr = ptr.getNext();
+        }
+        if(prev != null)
+            prev.setNext(null);
+        Node reversedHead = reverse(ptr);
+        SingleLinkedList<Node> laterHalfList = new SingleLinkedList<Node>();
+        laterHalfList.headerNode = reversedHead;
+        this.mergeLists(laterHalfList);
+    }
+
+    /**
+     * Solution with time complexity with O(m+n)
+     * @param secondList
+     */
+    public void descendingMergeSort(SingleLinkedList<Node> secondList){
+        Node ptr1 = this.headerNode;
+        Node ptr2 = secondList.headerNode;
+        if(ptr1 == null && ptr2 == null)
+            return;
+        this.sortedMerge(secondList);
+        this.reverse();
+    }
+
+    /**
+     * Rearrange in zigzag fashion with timecomplexity og O(n)
+     */
+    public void rearrangeInZigZagFashion(){
+        Node ptr = this.headerNode;
+        while(ptr != null && ptr.getNext() != null && ptr.getNext().getNext()!= null){
+            Node first = ptr;
+            Node second = first.getNext();
+            Node third = second.getNext();
+            int min = Math.min(first.getData() , Math.min(second.getData() , third.getData()));
+            int max = Math.max(first.getData() , Math.max(second.getData() , third.getData()));
+            int mid = first.getData() + second.getData() + third.getData() -(min + max);
+            first.setData(min);
+            second.setData(max);
+            third.setData(mid);
+            ptr = third;
+        }
+        if(ptr != null && ptr.getNext() != null && ptr.getData() > ptr.getNext().getData()){
+                int temp = ptr.getData();
+                ptr.setData(ptr.getNext().getData());
+                ptr.getNext().setData(temp);
+        }
+    }
+
+    public int addNumberRecursively(Node ptr , int number){
+        if(ptr == null)
+            return number;
+        int addition = addNumberRecursively(ptr.getNext() , number) + ptr.getData();
+        int sum = addition % 10;
+        int carry = addition /10;
+        ptr.setData(sum);
+        return carry;
+    }
+
+    /**
+     * Solution to add numbers to list with time complexity being O(n)
+     * @param number
+     */
+    public void addNumberToList(int number){
+        Node ptr = this.headerNode;
+        if(ptr == null)
+            return;
+        int finalCarry = addNumberRecursively(ptr , number);
+        if(finalCarry == 1){
+            Node carryNode = new Node(1);
+            Node temp = headerNode;
+            this.headerNode = carryNode;
+            carryNode.setNext(temp);
+        }
+    }
+
+    public void deleteLastOccurence(int key){
+        Node ptr = this.headerNode;
+        if(ptr == null)
+            return;
+        Node prev = null , prevLink = null , nextLink = null;
+        boolean hasNumberOccured = false;
+        while(ptr != null){
+            if(ptr.getData() == key){
+               prevLink = prev;
+               nextLink = ptr.getNext();
+               hasNumberOccured = true;
+            }
+            prev = ptr;
+            ptr = ptr.getNext();
+        }
+        if(prevLink != null){
+            prevLink.setNext(nextLink);
+        }
+        if(hasNumberOccured && prevLink == null){
+            this.headerNode = nextLink;
+        }
+    }
 }
