@@ -1,5 +1,7 @@
 package array.dimsension.one.rotations;
 
+import java.util.Scanner;
+
 public class ArrUtils{
     public static void print(int [] arr){
         for(int element : arr){
@@ -28,5 +30,23 @@ public class ArrUtils{
             input[high] = temp;
             low++;high--;
         }
+    }
+    public static int [] readArray(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Eneter the number of elements in array");
+        int n = scanner.nextInt();
+        int [] arr = new int[n];
+        int index = 0;
+        while(n-- > 0){
+            arr[index++] = scanner.nextInt();;
+        }
+        return arr;
+    }
+    public static int linearSearch(int [] arr , int low , int high , int key){
+        for(int index = low ; index <= high ; index++){
+            if(arr[index] == key)
+                return index;
+        }
+        return -1;
     }
 }

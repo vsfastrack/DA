@@ -58,4 +58,37 @@ public class CircularLinkedList <T extends Node>{
         fastPtr.setNext(nextPtr);
         return new Node[]{this.headerNode , nextPtr};
     }
+    public void sortedInsert(int item){
+        if(this.headerNode == null){
+            Node newNode = new Node(item);
+            this.headerNode = newNode;
+            newNode.setNext(this.headerNode);
+        }else{
+            Node ptr = this.headerNode , prev = null;
+            while(ptr.getNext() != this.headerNode && ptr.getData() < item){
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+            Node newNode = new Node(item);
+            if(ptr == this.headerNode && ptr.getData() > item){
+                Node temp = this.headerNode;
+                this.headerNode = newNode;
+                newNode.setNext(temp);
+                Node tempPtr = temp;
+                while(tempPtr.getNext() != temp)
+                    temp = temp.getNext();
+                temp.setNext(newNode);
+            }else{
+                Node nextPtr = ptr.getNext();
+                if(nextPtr == this.headerNode){
+                    ptr.setNext(newNode);
+                    newNode.setNext(nextPtr);
+                }else{
+                    if(prev != null)
+                        prev.setNext(newNode);
+                    newNode.setNext(ptr);
+                }
+            }
+        }
+    }
 }
