@@ -9,6 +9,12 @@ public class ArrUtils{
         }
         System.out.println();
     }
+    public static void print(int [] arr , int strtIndex , int endIndex){
+        for(int i = strtIndex ; i <= endIndex ; i++){
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
     public static int binarySearch(int [] arr , int low , int high , int key){
         if(low > high)
             return -1;
@@ -48,5 +54,12 @@ public class ArrUtils{
                 return index;
         }
         return -1;
+    }
+    public static int findSum(int [] arr , int startindex, int endIndex){
+        int sum = 0;
+        for(int i = startindex ; i <= endIndex ; i++){
+            sum += arr[i];
+        }
+        return sum;
     }
 }
